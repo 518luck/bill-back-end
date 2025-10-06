@@ -9,7 +9,7 @@ import {
 export class RegisterDto {
   @IsNotEmpty({ message: '用户名不能为空' })
   @IsString({ message: '用户名必须是字符串' })
-  @MinLength(3, { message: '用户名至少 3 位' })
+  @MinLength(2, { message: '用户名至少 2 位' })
   @MaxLength(20, { message: '用户名最多 20 位' })
   username: string;
 
