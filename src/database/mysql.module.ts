@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: '123456',
       database: 'billdb',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      autoLoadEntities: true,
       synchronize: true,
     }),
   ],

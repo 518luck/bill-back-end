@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql # MySQL 官方镜像
+    container_name: my-mysql # 容器名字
+    restart: always # 自动重启策略
+    environment:
+      MYSQL_ROOT_PASSWORD: root123 # root 用户密码
+    ports:
+      - '3307:3306' # 把 MySQL 的 3306 暴露出来
+
