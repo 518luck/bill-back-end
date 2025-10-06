@@ -1,13 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { LoginDto, RegisterDto } from '@/auth/dto';
+import { UsersService } from '@/users/users.service';
 
 @Injectable()
 export class AuthService {
+  constructor(private readonly usersService: UsersService) {}
+
   login(loginDto: LoginDto) {
     return loginDto;
   }
 
-  register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto) {
+    const user = await this.usersService.findByUsername(registerDto.username);
+    if (!user) {
+      throw new ConflictException('用户名存在 ( ´･･)ﾉ(._.`)');
+    }
+    // await this.usersService.create(registerDto);
     return registerDto;
   }
 }
