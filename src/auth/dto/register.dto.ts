@@ -1,9 +1,16 @@
-import { IsString, IsOptional, MaxLength } from 'class-validator';
-import { BaseUserDto } from './base-user.dto';
+// 注册 DTO
+import { IsString, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+
+import { BaseUserDto } from '@/auth/dto/base-password.dto';
 
 export class RegisterDto extends BaseUserDto {
-  @IsOptional()
-  @IsString({ message: '昵称必须是字符串' })
-  @MaxLength(30, { message: '昵称最多 30 位' })
-  nickname?: string;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(20)
+  username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  verificationCode: string; // 前端自己模拟验证码
 }
