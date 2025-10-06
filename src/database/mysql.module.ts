@@ -17,7 +17,7 @@ import { ConfigEnum } from '@/enum/config.enum';
         database: configService.get(ConfigEnum.DB_NAME),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: true, //自动建表
       }),
     }),
   ],
