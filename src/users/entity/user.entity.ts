@@ -12,9 +12,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
-  nickname: string;
-
   @OneToMany(() => UserAccount, (account) => account.user)
   accounts: UserAccount[];
 }

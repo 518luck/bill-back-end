@@ -12,10 +12,12 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const user = await this.usersService.findByUsername(registerDto.username);
-    if (!user) {
+    if (user) {
       throw new ConflictException('用户名存在 ( ´･･)ﾉ(._.`)');
     }
-    // await this.usersService.create(registerDto);
-    return registerDto;
+
+    const newUser = await this.usersService.createUser(registerDto);
+
+    return newUser;
   }
 }

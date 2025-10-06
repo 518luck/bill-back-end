@@ -5,7 +5,6 @@ import { User } from '@/users/entity/user.entity';
 export enum AccountType {
   EMAIL = 'email',
   PHONE = 'phone',
-  USERNAME = 'username',
 }
 
 @Entity()
