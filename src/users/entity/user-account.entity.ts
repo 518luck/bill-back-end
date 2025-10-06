@@ -1,11 +1,7 @@
 // users/entity/user-account.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from '@/users/entity/user.entity';
-
-export enum AccountType {
-  EMAIL = 'email',
-  PHONE = 'phone',
-}
+import { AccountType } from '@/enum/account-type.enum';
 
 @Entity()
 export class UserAccount {
