@@ -4,12 +4,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
+import { plainToInstance } from 'class-transformer';
 
 import { LoginDto, RegisterDto } from '@/auth/dto';
 import { UsersService } from '@/users/users.service';
 import { getAccountType } from '@/utils/account-type';
 import { AccountType } from '@/enum/account-type.enum';
-import { JwtService } from '@nestjs/jwt';
+import { User } from '@/users/entity/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -47,7 +49,8 @@ export class AuthService {
     const payload = { sub: user.id, username: user.username };
     const token = this.jwtService.sign(payload);
 
-    return { ...user, token };
+    const userIns = plainToInstance(User, user);
+    return { ...userIns, token };
   }
 
   async register(registerDto: RegisterDto) {
