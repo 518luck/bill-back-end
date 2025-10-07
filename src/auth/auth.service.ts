@@ -38,7 +38,7 @@ export class AuthService {
       throw new UnauthorizedException('用户不存在');
     }
 
-    const isPasswordValid = await argon2.verify(password, user.password);
+    const isPasswordValid = await argon2.verify(user.password, password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('密码错误');
     }
