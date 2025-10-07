@@ -9,8 +9,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { BillType } from '@/enum/bill-type.enum';
-
 @Entity('bill')
 export class Bill {
   @PrimaryGeneratedColumn()
@@ -18,9 +16,6 @@ export class Bill {
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   money: number;
-
-  @Column({ type: 'enum', enum: BillType })
-  type: BillType; // 收入或支出
 
   @Column({ length: 100 })
   category: string; // 分类（如“餐饮”、“交通”）

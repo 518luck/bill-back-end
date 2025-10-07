@@ -7,15 +7,15 @@ import {
   Min,
 } from 'class-validator';
 
-import { BillType } from '@/enum/bill-type.enum';
+import { CategoryType } from '@/enum/category-type.enum';
 
 export class CreateBillDto {
   @IsNumber({}, { message: '金额必须是数字' })
   @Min(0.01, { message: '金额必须大于0' })
   money: number;
 
-  @IsEnum(BillType, { message: '类型必须是 income 或 expense' })
-  type: BillType;
+  @IsEnum(CategoryType, { message: '类型必须是 income 或 expense' })
+  type: CategoryType;
 
   @IsNumber({}, { message: '分类ID必须是数字' })
   categoryId: number;
