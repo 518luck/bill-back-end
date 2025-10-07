@@ -2,10 +2,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 import { User } from '@/users/entity/user.entity';
@@ -26,17 +26,21 @@ export class Bill {
   @Column({ type: 'enum', enum: CategoryType })
   type: CategoryType;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  date: string; // 用户指定的账单消费日期
+  @Column({
+    type: 'date',
+    nullable: true,
+    default: () => '(CURRENT_DATE)',
+  })
+  date: Date; // 用户指定的账单消费日期
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.bills)
-  @JoinColumn({ name: 'userId' }) // ← 指定外键列
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ManyToOne(() => Category)
