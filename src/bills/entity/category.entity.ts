@@ -1,8 +1,16 @@
 // src/modules/category/entity/category.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  OneToMany,
+} from 'typeorm';
 
 import { CategoryType } from '@/enum/category-type.enum';
+import { Bill } from '@/bills/entity/bill.entity';
 
+@Index(['userId', 'name'], { unique: true })
 @Entity('category')
 export class Category {
   @PrimaryGeneratedColumn()
@@ -16,4 +24,7 @@ export class Category {
 
   @Column({ type: 'enum', enum: CategoryType })
   type: CategoryType; // 收入或支出
+
+  @OneToMany(() => Bill, (bill) => bill.category)
+  bills: Bill[];
 }

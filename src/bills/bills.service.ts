@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Bill } from './entity/bill.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { Bill } from '@/bills/entity/bill.entity';
+import { CreateBillDto } from '@/bills/dto/create-bill.dto';
 
 @Injectable()
 export class BillsService {
@@ -11,7 +13,8 @@ export class BillsService {
   ) {}
 
   // 创建账单
-  createBill() {
-    return 'This action adds a new bill';
+  createBill(createBillDto: CreateBillDto) {
+    const bill = this.billsRepository.create(createBillDto);
+    return this.billsRepository.save(bill);
   }
 }

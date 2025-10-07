@@ -1,4 +1,3 @@
-import { User } from '@/users/entity/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,6 +8,9 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+import { User } from '@/users/entity/user.entity';
+import { Category } from '@/bills/entity/category.entity';
+
 @Entity('bill')
 export class Bill {
   @PrimaryGeneratedColumn()
@@ -16,9 +18,6 @@ export class Bill {
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   money: number;
-
-  @Column({ length: 100 })
-  category: string; // 分类（如“餐饮”、“交通”）
 
   @Column({ nullable: true, length: 200 })
   note?: string; // 备注
@@ -35,4 +34,8 @@ export class Bill {
   @ManyToOne(() => User, (user) => user.bills)
   @JoinColumn({ name: 'userId' }) // ← 指定外键列
   user: User;
+
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: 'categoryId' })
+  category: Category;
 }

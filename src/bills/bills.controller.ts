@@ -13,6 +13,6 @@ export class BillsController {
       '🚀 ~ BillsController ~ createBill ~ createBillDto:',
       createBillDto,
     );
-    return this.billsService.createBill();
+    return this.billsService.createBill(createBillDto);
   }
 }
