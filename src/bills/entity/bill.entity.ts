@@ -1,18 +1,18 @@
+import { User } from '@/users/entity/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('bill')
 export class Bill {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  userId: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   money: number;
@@ -34,4 +34,8 @@ export class Bill {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.bills)
+  @JoinColumn({ name: 'userId' }) // ← 指定外键列
+  user: User;
 }

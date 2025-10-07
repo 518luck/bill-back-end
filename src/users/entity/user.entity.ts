@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import { UserAccount } from '@/users/entity/user-account.entity';
+import { Bill } from '@/bills/entity/bill.entity';
 
 @Entity('user')
 export class User {
@@ -17,4 +18,6 @@ export class User {
 
   @OneToMany(() => UserAccount, (account) => account.user)
   accounts: UserAccount[];
+  @OneToMany(() => Bill, (bill) => bill.user) // ← 反向关联账单
+  bills: Bill[];
 }
