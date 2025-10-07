@@ -3,7 +3,7 @@ import { Exclude } from 'class-transformer';
 
 import { UserAccount } from '@/users/entity/user-account.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;

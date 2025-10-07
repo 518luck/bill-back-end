@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from '@/users/entity/user.entity';
 import { AccountType } from '@/enum/account-type.enum';
 
-@Entity()
+@Entity('user_account')
 export class UserAccount {
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,7 +12,7 @@ export class UserAccount {
   type: AccountType;
 
   @Column({ unique: true })
-  value: string; // 登录标识
+  value: string;
 
   @ManyToOne(() => User, (user) => user.accounts)
   user: User;
