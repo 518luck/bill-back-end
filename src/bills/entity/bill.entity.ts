@@ -10,6 +10,7 @@ import {
 
 import { User } from '@/users/entity/user.entity';
 import { Category } from '@/bills/entity/category.entity';
+import { CategoryType } from '@/enum/category-type.enum';
 
 @Entity('bill')
 export class Bill {
@@ -22,13 +23,16 @@ export class Bill {
   @Column({ nullable: true, length: 200 })
   note?: string; // 备注
 
-  @Column({ type: 'date' })
-  date: string; // 账单日期
+  @Column({ type: 'enum', enum: CategoryType })
+  type: CategoryType;
 
-  @CreateDateColumn()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  date: string; // 用户指定的账单消费日期
+
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.bills)

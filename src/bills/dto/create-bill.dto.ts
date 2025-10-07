@@ -1,5 +1,5 @@
 import {
-  IsDateString,
+  IsISO8601,
   IsNumber,
   IsOptional,
   IsString,
@@ -19,9 +19,12 @@ export class CreateBillDto {
   note?: string;
 
   @IsOptional()
-  @IsDateString(
+  @IsISO8601(
     {},
-    { message: '日期必须是有效的 ISO 日期字符串，例如 2025-10-07' },
+    {
+      message:
+        '账单日期必须是有效的 ISO 8601 日期字符串，例如 2025-10-07T12:00:00Z',
+    },
   )
-  date?: string;
+  date?: string; // <-- 映射到数据库的 date 字段
 }
