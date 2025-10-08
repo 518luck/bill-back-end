@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '@/auth/decorator/public.decorator';
 
+import { JwtPayload } from '@/auth/type/jwt-payload.type';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
@@ -18,17 +19,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (isPublic) {
       return true; // 放行
     }
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, info: any) {
-    console.log('🚀 ~ JwtAuthGuard ~ handleRequest ~ user:', user);
+  handleRequest<TUser = JwtPayload>(err: any, user: any, info: any): TUser {
     if (err || !user) {
       throw err || new UnauthorizedException(`Token 无效或已过期 ${info}`);
     }
-    return user;
+    return user as TUser;
   }
 }
