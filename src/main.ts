@@ -17,7 +17,7 @@ async function bootstrap() {
   // 配置全局序列化拦截器
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   // 全局使用 JwtAuthGuard
-  app.useGlobalGuards(new JwtAuthGuard());
+  app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
 
   await app.listen(process.env.PORT ?? 3000);
 }
