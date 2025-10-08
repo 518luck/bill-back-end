@@ -46,13 +46,13 @@ export class AuthService {
     }
 
     // 生成 JWT
-    const payload = { sub: user.id, username: user.username };
-    const token = this.jwtService.sign(payload);
+    const token = this.generateJwt(user);
 
     const userIns = plainToInstance(User, user);
     return { ...userIns, token };
   }
 
+  // 注册用户
   async register(registerDto: RegisterDto) {
     const user = await this.usersService.findByUsername(registerDto.username);
     if (user) {
@@ -62,5 +62,11 @@ export class AuthService {
     const newUser = await this.usersService.createUser(registerDto);
 
     return newUser;
+  }
+
+  // 生成 JWT 令牌
+  generateJwt(user: User) {
+    const payload = { sub: user.id, username: user.username };
+    return this.jwtService.sign(payload);
   }
 }
