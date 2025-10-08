@@ -9,7 +9,7 @@ import {
 import { CategoryType } from '@/enum/category-type.enum';
 import { Bill } from '@/bills/entity/bill.entity';
 
-@Index(['userId', 'name'], { unique: true })
+@Index(['userId', 'name', 'type'], { unique: true })
 @Entity('category')
 export class Category {
   @PrimaryGeneratedColumn()

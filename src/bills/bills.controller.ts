@@ -14,7 +14,7 @@ export class BillsController {
   }
 
   //添加类型
-  @Post('categories/default')
+  @Post('categories')
   addCategoryType(@Body() createCategoryDto: CreateCategoryDto) {
     return this.billsService.createCategory(createCategoryDto);
   }

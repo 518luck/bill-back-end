@@ -21,6 +21,7 @@ export class BillsService {
     return this.billsRepository.save(bill);
   }
 
+  // 创建分类(餐饮,交通,住宿,其他....)
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
@@ -31,6 +32,7 @@ export class BillsService {
       where: {
         name: category.name,
         userId: category.userId,
+        type: category.type,
       },
     });
     if (exists) {
