@@ -1,18 +1,21 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
 import { BillsService } from '@/bills/bills.service';
-import { CreateBillDto } from '@/bills/dto/create-bill.dto';
+import { CreateBillDto, CreateCategoryDto } from '@/bills/dto';
 
 @Controller('bills')
 export class BillsController {
   constructor(private readonly billsService: BillsService) {}
 
+  // 创建账单
   @Post()
   createBill(@Body() createBillDto: CreateBillDto) {
-    console.log(
-      '🚀 ~ BillsController ~ createBill ~ createBillDto:',
-      createBillDto,
-    );
     return this.billsService.createBill(createBillDto);
+  }
+
+  //添加类型
+  @Post('categories/default')
+  addCategoryType(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.billsService.createCategory(createCategoryDto);
   }
 }
