@@ -4,7 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Bill } from '@/bills/entity/bill.entity';
 import { Category } from '@/bills/entity/category.entity';
-import { CreateBillDto, CreateCategoryDto } from '@/bills/dto';
+import {
+  CreateBillDto,
+  CreateCategoryDto,
+  GetCategoryTypeDto,
+} from '@/bills/dto';
 
 @Injectable()
 export class BillsService {
@@ -16,7 +20,15 @@ export class BillsService {
   ) {}
 
   // 获取消费类型
-  getCategoryTypes() {}
+  getCategoryTypes(getCategoryTypeDto: GetCategoryTypeDto) {
+    const { userId, type } = getCategoryTypeDto;
+    return this.categoriesRepository.find({
+      where: [
+        { userId: '0', type },
+        { userId: userId, type },
+      ],
+    });
+  }
 
   // 创建账单
   createBill(createBillDto: CreateBillDto) {
@@ -28,7 +40,7 @@ export class BillsService {
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
-      userId: createCategoryDto.userId ?? 0, //不传递就是默认系统分类
+      userId: createCategoryDto.userId ?? '0', //不传递就是默认系统分类
     });
 
     const exists = await this.categoriesRepository.findOne({

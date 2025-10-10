@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsEnum,
-  IsInt,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsEnum } from 'class-validator';
 
 import { CategoryType } from '@/enum/category-type.enum';
 
@@ -17,6 +11,6 @@ export class CreateCategoryDto {
   type: CategoryType;
 
   @IsOptional()
-  @IsInt({ message: 'userId 必须是整数' })
-  userId?: number; // 可选，不传默认系统分类 userId = 0
+  @IsString({ message: 'userId 必须是字符串' })
+  userId?: string; // 可选，不传默认系统分类 userId = '0'
 }

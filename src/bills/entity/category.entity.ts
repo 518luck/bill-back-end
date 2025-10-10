@@ -15,8 +15,8 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int', default: 0 })
-  userId: number; // 0 表示系统默认分类
+  @Column({ type: 'varchar', default: '0' })
+  userId: string; // 0 表示系统默认分类
 
   @Column({ length: 50 })
   name: string; // 分类名称
