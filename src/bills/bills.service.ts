@@ -15,6 +15,9 @@ export class BillsService {
     private readonly categoriesRepository: Repository<Category>,
   ) {}
 
+  // 获取消费类型
+  getCategoryTypes() {}
+
   // 创建账单
   createBill(createBillDto: CreateBillDto) {
     const bill = this.billsRepository.create(createBillDto);
