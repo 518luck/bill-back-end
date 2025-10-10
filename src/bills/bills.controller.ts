@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { BillsService } from '@/bills/bills.service';
 import { CreateBillDto, CreateCategoryDto } from '@/bills/dto';
@@ -10,7 +10,7 @@ export class BillsController {
 
   // 获取消费类型
   @Get('categories')
-  getCategoryTypes(@Body() getCategoryTypeDto: GetCategoryTypeDto) {
+  getCategoryTypes(@Query() getCategoryTypeDto: GetCategoryTypeDto) {
     return this.billsService.getCategoryTypes(getCategoryTypeDto);
   }
 
