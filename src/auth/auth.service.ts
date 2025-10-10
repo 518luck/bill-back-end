@@ -20,6 +20,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  // 用户登录
   async login(loginDto: LoginDto) {
     const { account, password } = loginDto;
     const accountType = getAccountType(account);

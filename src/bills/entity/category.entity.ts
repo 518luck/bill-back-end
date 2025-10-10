@@ -24,6 +24,9 @@ export class Category {
   @Column({ type: 'enum', enum: CategoryType })
   type: CategoryType; // 收入或支出
 
+  @Column({ length: 100, nullable: true })
+  icon: string; // 存 react-icons 组件名，比如 "FaUtensils"
+
   @OneToMany(() => Bill, (bill) => bill.category)
   bills: Bill[];
 }
