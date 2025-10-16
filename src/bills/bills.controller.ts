@@ -20,7 +20,7 @@ export class BillsController {
     return this.billsService.createBill(createBillDto);
   }
 
-  //添加类型
+  //创建分类(购物,工资...)
   @Post('categories')
   addCategoryType(@Body() createCategoryDto: CreateCategoryDto) {
     return this.billsService.createCategory(createCategoryDto);

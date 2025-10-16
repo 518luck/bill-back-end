@@ -9,7 +9,7 @@ import {
 import { CategoryType } from '@/enum/category-type.enum';
 import { Bill } from '@/bills/entity/bill.entity';
 
-@Index(['userId', 'name', 'type'], { unique: true })
+@Index(['userId', 'iconName', 'type', 'title'], { unique: true })
 @Entity('category')
 export class Category {
   @PrimaryGeneratedColumn()
@@ -19,13 +19,13 @@ export class Category {
   userId: string; // 0 表示系统默认分类
 
   @Column({ length: 50 })
-  name: string; // 分类名称
+  title: string; // 分类名称
 
   @Column({ type: 'enum', enum: CategoryType })
   type: CategoryType; // 收入或支出
 
   @Column({ length: 100, nullable: true })
-  icon: string; // 存 react-icons 组件名，比如 "FaUtensils"
+  iconName: string; // 存 react-icons 组件名，比如 "FaUtensils"
 
   @OneToMany(() => Bill, (bill) => bill.category)
   bills: Bill[];

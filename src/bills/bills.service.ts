@@ -36,7 +36,7 @@ export class BillsService {
     return this.billsRepository.save(bill);
   }
 
-  // 创建分类(餐饮,交通,住宿,其他....)
+  // 创建分类(购物,工资...)
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
@@ -45,7 +45,8 @@ export class BillsService {
 
     const exists = await this.categoriesRepository.findOne({
       where: {
-        name: category.name,
+        title: category.title,
+        iconName: category.iconName,
         userId: category.userId,
         type: category.type,
       },
