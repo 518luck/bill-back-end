@@ -9,14 +9,14 @@ import {
 import { CategoryType } from '@/enum/category-type.enum';
 import { Bill } from '@/bills/entity/bill.entity';
 
-@Index(['userId', 'iconName', 'type', 'title'], { unique: true })
+@Index(['user_id', 'icon_name', 'type', 'title'], { unique: true })
 @Entity('category')
 export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', default: '0' })
-  userId: string; // 0 表示系统默认分类
+  user_id: string; // 0 表示系统默认分类
 
   @Column({ length: 50 })
   title: string; // 分类名称
@@ -25,7 +25,7 @@ export class Category {
   type: CategoryType; // 收入或支出
 
   @Column({ length: 100, nullable: true })
-  iconName: string; // 存 react-icons 组件名，比如 "FaUtensils"
+  icon_name: string; // 存 react-icons 组件名，比如 "FaUtensils"
 
   @OneToMany(() => Bill, (bill) => bill.category)
   bills: Bill[];

@@ -8,15 +8,15 @@ import { Public } from '@/auth/decorator/public.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   // 登录
-  @Post('login')
   @Public()
+  @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
   // 注册
-  @Post('register')
   @Public()
+  @Post('register')
   register(@Body() createUserDto: RegisterDto) {
     return this.authService.register(createUserDto);
   }

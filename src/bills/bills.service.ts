@@ -24,8 +24,8 @@ export class BillsService {
     const { userId, type } = getCategoryTypeDto;
     return this.categoriesRepository.find({
       where: [
-        { userId: '0', type },
-        { userId: userId, type },
+        { user_id: '0', type },
+        { user_id: userId, type },
       ],
     });
   }
@@ -40,14 +40,14 @@ export class BillsService {
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
-      userId: createCategoryDto.userId ?? '0', //不传递就是默认系统分类
+      user_id: createCategoryDto.user_id ?? '0', //不传递就是默认系统分类
     });
 
     const exists = await this.categoriesRepository.findOne({
       where: {
         title: category.title,
-        iconName: category.iconName,
-        userId: category.userId,
+        icon_name: category.icon_name,
+        user_id: category.user_id,
         type: category.type,
       },
     });
