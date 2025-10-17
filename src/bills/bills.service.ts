@@ -20,8 +20,11 @@ export class BillsService {
   ) {}
 
   // 获取消费类型
-  getCategoryTypes(getCategoryTypeDto: GetCategoryTypeDto) {
-    const { userId, type } = getCategoryTypeDto;
+  async getCategoryTypes(
+    getCategoryTypeDto: GetCategoryTypeDto,
+    userId: string,
+  ) {
+    const { type } = getCategoryTypeDto;
     return this.categoriesRepository.find({
       where: [
         { user_id: '0', type },

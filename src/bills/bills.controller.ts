@@ -9,12 +9,6 @@ import { CurrentUserId } from '@/decorator/current-user-id.decorator';
 export class BillsController {
   constructor(private readonly billsService: BillsService) {}
 
-  // 获取消费类型
-  @Get('categories')
-  getCategoryTypes(@Query() getCategoryTypeDto: GetCategoryTypeDto) {
-    return this.billsService.getCategoryTypes(getCategoryTypeDto);
-  }
-
   // 创建账单
   @Post()
   createBill(@Body() createBillDto: CreateBillDto) {
@@ -28,5 +22,13 @@ export class BillsController {
     @CurrentUserId() userId: string,
   ) {
     return this.billsService.createCategory(createCategoryDto, userId);
+  }
+  // 获取分类图标(购物,工资...)
+  @Get('categories')
+  getCategoryTypes(
+    @Query() getCategoryTypeDto: GetCategoryTypeDto,
+    @CurrentUserId() userId: string,
+  ) {
+    return this.billsService.getCategoryTypes(getCategoryTypeDto, userId);
   }
 }
