@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 
 import { UserRole } from '@/enum/user-role.enum';
 import { JwtPayload } from '@/auth/type/jwt-payload.type';
+import { IS_PUBLIC_KEY } from '@/auth/decorator/public.decorator';
 
 interface RequestWithUser extends Request {
   user: JwtPayload & { role: string };
@@ -15,6 +16,12 @@ export class RolesGuard implements CanActivate {
   // 这个方法会在每个受保护的路由被调用
   // 它会检查当前用户是否有足够的权限来访问这个路由
   canActivate(context: ExecutionContext): boolean {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) return true; // 公开路由直接放行
+
     // 从当前路由的元数据中取出 roles 数组
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
       'roles',
