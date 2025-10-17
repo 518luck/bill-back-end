@@ -9,16 +9,21 @@ import { JwtPayload } from '@/auth/type/jwt-payload.type';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(configService: ConfigService) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), //eslint-disable-line
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>(ConfigEnum.JWT_SECRET, 'default'),
       passReqToCallback: true,
     });
   }
 
+  // Passport JWT 验证成功后会调用这个方法
+  // payload 就是 JWT 解析后的负载
   validate(payload: JwtPayload) {
-    return { userId: payload.sub, username: payload.username };
+    return {
+      userId: payload.sub,
+      username: payload.username,
+      role: payload.role,
+    };
   }
 }

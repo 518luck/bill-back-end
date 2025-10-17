@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 
 import { UserAccount } from '@/users/entity/user-account.entity';
 import { Bill } from '@/bills/entity/bill.entity';
+import { UserRole } from '@/enum/user-role.enum';
 
 @Entity('user')
 export class User {
@@ -15,6 +16,9 @@ export class User {
   @Column()
   @Exclude()
   password: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  role: UserRole;
 
   @OneToMany(() => UserAccount, (account) => account.user)
   accounts: UserAccount[];
