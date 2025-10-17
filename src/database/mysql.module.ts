@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { ConfigEnum } from '@/enum/config.enum';
 
@@ -18,6 +19,7 @@ import { ConfigEnum } from '@/enum/config.enum';
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
         synchronize: true, //自动建表
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
   ],

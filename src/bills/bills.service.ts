@@ -37,10 +37,11 @@ export class BillsService {
   }
 
   // 创建分类(购物,工资...)
-  async createCategory(createCategoryDto: CreateCategoryDto) {
+  async createCategory(createCategoryDto: CreateCategoryDto, userId: string) {
+    console.log('🚀 ~ BillsService ~ createCategory ~ userId:', userId);
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
-      user_id: createCategoryDto.user_id ?? '0', //不传递就是默认系统分类
+      user_id: userId,
     });
 
     const exists = await this.categoriesRepository.findOne({

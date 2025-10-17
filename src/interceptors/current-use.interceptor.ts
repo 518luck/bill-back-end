@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 import { UserRole } from '@/enum/user-role.enum';
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   user: {
     userId: string;
     username: string;
