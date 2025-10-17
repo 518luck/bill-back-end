@@ -38,7 +38,6 @@ export class BillsService {
 
   // 创建分类(购物,工资...)
   async createCategory(createCategoryDto: CreateCategoryDto, userId: string) {
-    console.log('🚀 ~ BillsService ~ createCategory ~ userId:', userId);
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
       user_id: userId,

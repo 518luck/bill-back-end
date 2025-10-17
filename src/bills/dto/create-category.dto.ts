@@ -20,8 +20,4 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsString({ message: '图标名称必须是字符串' })
   icon_name?: string;
-
-  @IsOptional()
-  @IsString({ message: 'user_id 必须是字符串' })
-  user_id?: string; // 可选，不传默认系统分类 user_id = '0'
 }
