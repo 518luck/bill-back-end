@@ -4,6 +4,7 @@ import { ClassSerializerInterceptor } from '@nestjs/common';
 import { AppModule } from '@/app.module';
 import { validationConfig } from '@/config/validation.config';
 import { swaggerConfig } from '@/config/swgger.config';
+import { RolesGuard } from '@/guard/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,8 @@ async function bootstrap() {
   validationConfig(app);
   // 配置全局序列化拦截器
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  // 注册全局守卫
+  app.useGlobalGuards(new RolesGuard(app.get(Reflector)));
 
   await app.listen(process.env.PORT ?? 3000);
 }
