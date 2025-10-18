@@ -1,6 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor } from '@nestjs/common';
 
+declare const module: any; // HMR 声明
+
 import { AppModule } from '@/app.module';
 import { validationConfig } from '@/config/validation.config';
 import { swaggerConfig } from '@/config/swgger.config';
@@ -24,6 +26,11 @@ async function bootstrap() {
   app.useGlobalGuards(new RolesGuard(app.get(Reflector)));
 
   await app.listen(process.env.PORT ?? 3000);
+
+  if (module.hot) {
+    module.hot.accept(); // 接受更新
+    module.hot.dispose(() => app.close()); // 热重载前关闭应用
+  }
 }
 
 void bootstrap();

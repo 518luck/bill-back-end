@@ -1,4 +1,4 @@
-import { CategoryType } from '@/enum/category-type.enum';
+import { IconType } from '@/enum/icon-type.enum';
 import {
   IsISO8601,
   IsNumber,
@@ -13,10 +13,10 @@ export class CreateBillDto {
   money: number;
 
   @IsNumber({}, { message: '分类ID必须是数字' })
-  categoryId: number;
+  iconId: number;
 
   @IsString({ message: '分类类型必须是字符串' })
-  type: CategoryType;
+  type: IconType;
 
   @IsOptional()
   @IsString({ message: '备注必须是字符串' })

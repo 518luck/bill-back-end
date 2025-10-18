@@ -16,7 +16,8 @@ import { ConfigEnum } from '@/enum/config.enum';
         username: configService.get(ConfigEnum.DB_USER),
         password: configService.get(ConfigEnum.DB_PASS),
         database: configService.get(ConfigEnum.DB_NAME),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        entities: [__dirname + '/../**/*.entity.js'],
         autoLoadEntities: true,
         synchronize: true, //自动建表
         namingStrategy: new SnakeNamingStrategy(),

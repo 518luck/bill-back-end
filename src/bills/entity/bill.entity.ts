@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 
 import { User } from '@/users/entity/user.entity';
-import { Category } from '@/bills/entity/category.entity';
-import { CategoryType } from '@/enum/category-type.enum';
+import { Icon } from '@/bills/entity/icon';
+import { IconType } from '@/enum/icon-type.enum';
 
 @Entity('bill')
 export class Bill {
@@ -23,8 +23,8 @@ export class Bill {
   @Column({ nullable: true, length: 200 })
   note?: string; // 备注
 
-  @Column({ type: 'enum', enum: CategoryType })
-  type: CategoryType;
+  @Column({ type: 'enum', enum: IconType })
+  type: IconType;
 
   @Column({
     type: 'date',
@@ -34,16 +34,16 @@ export class Bill {
   date: Date; // 用户指定的账单消费日期
 
   @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
+  create_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updated_at: Date;
+  update_at: Date;
 
   @ManyToOne(() => User, (user) => user.bills)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Category)
+  @ManyToOne(() => Icon)
   @JoinColumn({ name: 'category_id' })
-  category: Category;
+  icon: Icon;
 }

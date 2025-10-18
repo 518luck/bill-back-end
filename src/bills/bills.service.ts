@@ -3,28 +3,21 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Bill } from '@/bills/entity/bill.entity';
-import { Category } from '@/bills/entity/category.entity';
-import {
-  CreateBillDto,
-  CreateCategoryDto,
-  GetCategoryTypeDto,
-} from '@/bills/dto';
+import { Icon } from '@/bills/entity/icon';
+import { CreateBillDto, CreateIconDto, GetIconTypeDto } from '@/bills/dto';
 
 @Injectable()
 export class BillsService {
   constructor(
     @InjectRepository(Bill)
     private readonly billsRepository: Repository<Bill>,
-    @InjectRepository(Category)
-    private readonly categoriesRepository: Repository<Category>,
+    @InjectRepository(Icon)
+    private readonly categoriesRepository: Repository<Icon>,
   ) {}
 
-  // 获取消费类型
-  async getCategoryTypes(
-    getCategoryTypeDto: GetCategoryTypeDto,
-    userId: string,
-  ) {
-    const { type } = getCategoryTypeDto;
+  // 获取分类图标(购物,工资...)
+  async getIconTypes(getIconTypeDto: GetIconTypeDto, userId: string) {
+    const { type } = getIconTypeDto;
     return this.categoriesRepository.find({
       where: [
         { user_id: '0', type },
@@ -40,7 +33,7 @@ export class BillsService {
   }
 
   // 创建分类(购物,工资...)
-  async createCategory(createCategoryDto: CreateCategoryDto, userId: string) {
+  async createIcon(createCategoryDto: CreateIconDto, userId: string) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
       user_id: userId,
@@ -54,9 +47,17 @@ export class BillsService {
         type: category.type,
       },
     });
+
     if (exists) {
       throw new HttpException('分类已存在', HttpStatus.BAD_REQUEST);
     }
-    return this.categoriesRepository.save(category);
+
+    const savedCategory = await this.categoriesRepository.save(category);
+
+    return {
+      success: true,
+      message: '分类创建成功',
+      data: savedCategory,
+    };
   }
 }

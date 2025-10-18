@@ -1,3 +1,3 @@
 export { CreateBillDto } from '@/bills/dto/create-bill.dto';
-export { CreateCategoryDto } from '@/bills/dto/create-category.dto';
-export { GetCategoryTypeDto } from '@/bills/dto/get-category-type.dto';
+export { CreateIconDto } from '@/bills/dto/create-icon.dto';
+export { GetIconTypeDto } from '@/bills/dto/get-icon-type.dto';

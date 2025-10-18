@@ -4,11 +4,11 @@ import { BillsService } from '@/bills/bills.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Bill } from '@/bills/entity/bill.entity';
-import { Category } from '@/bills/entity/category.entity';
+import { Icon } from '@/bills/entity/icon';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Bill, Category]), ConfigModule],
+  imports: [TypeOrmModule.forFeature([Bill, Icon]), ConfigModule],
   controllers: [BillsController],
   providers: [BillsService],
 })

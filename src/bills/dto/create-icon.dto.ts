@@ -6,18 +6,22 @@ import {
   MaxLength,
 } from 'class-validator';
 
-import { CategoryType } from '@/enum/category-type.enum';
+import { IconType } from '@/enum/icon-type.enum';
 
-export class CreateCategoryDto {
+export class CreateIconDto {
   @IsNotEmpty({ message: '分类名称不能为空' })
   @IsString({ message: '分类名称必须是字符串' })
   @MaxLength(4, { message: '分类名称不能超过4个字符' })
   title: string;
 
-  @IsEnum(CategoryType, { message: '类型必须是 income 或 expense' })
-  type: CategoryType;
+  @IsEnum(IconType, { message: '类型必须是 income 或 expense' })
+  type: IconType;
 
   @IsOptional()
   @IsString({ message: '图标名称必须是字符串' })
   icon_name?: string;
+
+  // 只有管理员才能发送这个
+  @IsOptional()
+  global?: boolean;
 }
