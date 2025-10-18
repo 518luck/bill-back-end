@@ -1,7 +1,9 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor } from '@nestjs/common';
 
-declare const module: any; // HMR 声明
+declare const module: {
+  hot?: { accept: () => void; dispose: (callback: () => void) => void };
+};
 
 import { AppModule } from '@/app.module';
 import { validationConfig } from '@/config/validation.config';
@@ -29,7 +31,9 @@ async function bootstrap() {
 
   if (module.hot) {
     module.hot.accept(); // 接受更新
-    module.hot.dispose(() => app.close()); // 热重载前关闭应用
+    module.hot.dispose(() => {
+      void app.close(); // 使用 void 忽略 Promise
+    }); // 热重载前关闭应用
   }
 }
 
