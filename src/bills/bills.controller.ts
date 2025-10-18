@@ -2,9 +2,10 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { BillsService } from '@/bills/bills.service';
 import { CreateBillDto, CreateIconDto } from '@/bills/dto';
-import { GetIconTypeDto } from './dto/get-icon-type.dto';
+import { GetIconTypeDto } from '@/bills/dto/get-icon-type.dto';
 import { CurrentUserId } from '@/decorator/current-user-id.decorator';
 import { Roles } from '@/decorator/roles.decorator';
+import { UserRole } from '@/enum/user-role.enum';
 
 @Controller('bills')
 export class BillsController {
@@ -27,7 +28,7 @@ export class BillsController {
 
   //创建全局分类图标(购物,工资...) *管理员-->用来创建默认图标
   @Post('admin-icon')
-  @Roles()
+  @Roles(UserRole.ADMIN)
   addAdminIcon(@Body() createIconDto: CreateIconDto) {
     const userId = '0';
     return this.billsService.createIcon(createIconDto, userId);

@@ -52,12 +52,11 @@ export class BillsService {
       throw new HttpException('分类已存在', HttpStatus.BAD_REQUEST);
     }
 
-    const savedCategory = await this.categoriesRepository.save(category);
+    await this.categoriesRepository.save(category);
 
     return {
       success: true,
       message: '分类创建成功',
-      data: savedCategory,
     };
   }
 }
