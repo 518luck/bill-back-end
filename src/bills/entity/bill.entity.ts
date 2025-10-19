@@ -20,14 +20,14 @@ export class Bill {
   money: number;
 
   // 备注
-  @Column({ nullable: true, length: 200 })
+  @Column({ length: 200 })
   note?: string;
 
   //消费/支出
   @Column({ type: 'enum', enum: IconType })
   type: IconType;
 
-  @Column({ nullable: true, length: 50 })
+  @Column({ length: 50 })
   icon_name: string;
 
   // 用户指定的账单消费日期

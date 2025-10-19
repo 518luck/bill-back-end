@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { ConfigEnum } from '@/enum/config.enum';
-import { JwtPayload } from '@/auth/type/jwt-payload.type';
+import { JwtPayload } from '@/auth/types/jwt-payload.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   // payload 就是 JWT 解析后的负载
   validate(payload: JwtPayload) {
     return {
-      userId: payload.sub,
+      sub: payload.sub,
       username: payload.username,
       role: payload.role,
     };

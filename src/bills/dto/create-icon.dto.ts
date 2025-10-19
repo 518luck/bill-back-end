@@ -21,6 +21,10 @@ export class CreateIconDto {
   @IsString({ message: '图标名称必须是字符串' })
   icon_name?: string;
 
+  @IsOptional()
+  @IsString({ message: '用户ID必须是字符串' })
+  user_id?: string;
+
   // 只有管理员才能发送这个
   @IsOptional()
   global?: boolean;

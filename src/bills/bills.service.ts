@@ -16,27 +16,29 @@ export class BillsService {
   ) {}
 
   // 获取分类图标(购物,工资...)
-  async getIconTypes(getIconTypeDto: GetIconTypeDto, userId: string) {
+  async getIconTypes(getIconTypeDto: GetIconTypeDto) {
     const { type } = getIconTypeDto;
     return this.categoriesRepository.find({
       where: [
         { user_id: '0', type },
-        { user_id: userId, type },
+        { user_id: getIconTypeDto.user_id, type },
       ],
     });
   }
 
   // 创建账单
   createBill(createBillDto: CreateBillDto) {
-    const bill = this.billsRepository.create(createBillDto);
+    const bill = this.billsRepository.create({
+      ...createBillDto,
+      // user_id: userId,
+    });
     return this.billsRepository.save(bill);
   }
 
   // 创建分类(购物,工资...)
-  async createIcon(createCategoryDto: CreateIconDto, userId: string) {
+  async createIcon(createCategoryDto: CreateIconDto) {
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
-      user_id: userId,
     });
 
     const exists = await this.categoriesRepository.findOne({

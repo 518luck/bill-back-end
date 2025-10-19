@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { UserRole } from '@/enum/user-role.enum';
-import { JwtPayload } from '@/auth/type/jwt-payload.type';
+import { JwtPayload } from '@/auth/types/jwt-payload.type';
 import { IS_PUBLIC_KEY } from '@/auth/decorator/public.decorator';
 
 interface RequestWithUser extends Request {
