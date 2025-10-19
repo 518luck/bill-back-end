@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 
 import { User } from '@/users/entity/user.entity';
-import { Icon } from '@/bills/entity/icon';
 import { IconType } from '@/enum/icon-type.enum';
 
 @Entity('bill')
@@ -20,18 +19,24 @@ export class Bill {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   money: number;
 
+  // 备注
   @Column({ nullable: true, length: 200 })
-  note?: string; // 备注
+  note?: string;
 
+  //消费/支出
   @Column({ type: 'enum', enum: IconType })
   type: IconType;
 
+  @Column({ nullable: true, length: 50 })
+  icon_name: string;
+
+  // 用户指定的账单消费日期
   @Column({
     type: 'date',
     nullable: true,
     default: () => '(CURRENT_DATE)',
   })
-  date: Date; // 用户指定的账单消费日期
+  date: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
   create_at: Date;
@@ -42,8 +47,4 @@ export class Bill {
   @ManyToOne(() => User, (user) => user.bills)
   @JoinColumn({ name: 'user_id' })
   user: User;
-
-  @ManyToOne(() => Icon)
-  @JoinColumn({ name: 'category_id' })
-  icon: Icon;
 }

@@ -1,13 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Index,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { IconType } from '@/enum/icon-type.enum';
-import { Bill } from '@/bills/entity/bill.entity';
 
 @Index(['user_id', 'icon_name', 'type', 'title'], { unique: true })
 @Entity('icon')
@@ -15,6 +9,7 @@ export class Icon {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Exclude()
   @Column({ type: 'varchar', default: '0' })
   user_id: string; // 0 表示系统默认分类
 
@@ -26,7 +21,4 @@ export class Icon {
 
   @Column({ length: 100, nullable: true })
   icon_name: string; // 存 react-icons 组件名，比如 "FaUtensils"
-
-  @OneToMany(() => Bill, (bill) => bill.icon)
-  bills: Bill[];
 }
