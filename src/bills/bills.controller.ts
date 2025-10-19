@@ -5,6 +5,7 @@ import { CreateBillDto, CreateIconDto } from '@/bills/dto';
 import { GetIconTypeDto } from '@/bills/dto/get-icon-type.dto';
 import { Roles } from '@/decorator/roles.decorator';
 import { UserRole } from '@/enum/user-role.enum';
+import { UserId } from '@/decorator/extract-jwt-user-id.decorator';
 
 @Controller('bills')
 export class BillsController {
@@ -31,7 +32,10 @@ export class BillsController {
 
   // 获取分类图标(购物,工资...)
   @Get('icon')
-  getIconTypes(@Query() getIconTypeDto: GetIconTypeDto) {
-    return this.billsService.getIconTypes(getIconTypeDto);
+  getIconTypes(
+    @Query() getIconTypeDto: GetIconTypeDto,
+    @UserId() userId: string,
+  ) {
+    return this.billsService.getIconTypes(getIconTypeDto, userId);
   }
 }

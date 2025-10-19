@@ -16,12 +16,13 @@ export class BillsService {
   ) {}
 
   // 获取分类图标(购物,工资...)
-  async getIconTypes(getIconTypeDto: GetIconTypeDto) {
+  async getIconTypes(getIconTypeDto: GetIconTypeDto, userId: string) {
+    console.log('🚀 ~ BillsService ~ getIconTypes ~ userId:', userId);
     const { type } = getIconTypeDto;
     return this.categoriesRepository.find({
       where: [
         { user_id: '0', type },
-        { user_id: getIconTypeDto.user_id, type },
+        { user_id: userId, type },
       ],
     });
   }
