@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Bill } from '@/bills/entity/bill.entity';
 import { Icon } from '@/bills/entity/icon';
 import { CreateBillDto, CreateIconDto, GetIconTypeDto } from '@/bills/dto';
+import { User } from '@/users/entity/user.entity';
 
 @Injectable()
 export class BillsService {
@@ -13,11 +14,12 @@ export class BillsService {
     private readonly billsRepository: Repository<Bill>,
     @InjectRepository(Icon)
     private readonly categoriesRepository: Repository<Icon>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
   ) {}
 
-  // 获取分类图标(购物,工资...)
+  // 获取icon图标(购物,工资...)
   async getIconTypes(getIconTypeDto: GetIconTypeDto, userId: string) {
-    console.log('🚀 ~ BillsService ~ getIconTypes ~ userId:', userId);
     const { type } = getIconTypeDto;
     return this.categoriesRepository.find({
       where: [
@@ -28,43 +30,54 @@ export class BillsService {
   }
 
   // 创建账单
-  createBill(createBillDto: CreateBillDto) {
+  async createBill(createBillDto: CreateBillDto) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: createBillDto.user_id,
+      },
+    });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
     const bill = this.billsRepository.create({
       ...createBillDto,
-      // user_id: userId,
+      user,
+      date: createBillDto.date ? new Date(createBillDto.date) : new Date(),
     });
-    return this.billsRepository.save(bill);
+
+    await this.billsRepository.save(bill);
+
+    return {
+      success: true,
+      message: '小账童记住啦',
+    };
   }
 
-  // 创建分类(购物,工资...)
-  async createIcon(createCategoryDto: CreateIconDto, isAdmin: boolean = false) {
-    console.log(
-      '🚀 ~ BillsService ~ createIcon ~ createCategoryDto:',
-      createCategoryDto,
-    );
-    const category = this.categoriesRepository.create({
-      ...createCategoryDto,
-      user_id: isAdmin ? '0' : createCategoryDto.user_id,
+  // 创建icon(购物,工资...)
+  async createIcon(createIconDto: CreateIconDto, isAdmin: boolean = false) {
+    const icon = this.categoriesRepository.create({
+      ...createIconDto,
+      user_id: isAdmin ? '0' : createIconDto.user_id,
     });
 
     const exists = await this.categoriesRepository.findOne({
       where: {
-        title: category.title,
-        icon_name: category.icon_name,
-        user_id: category.user_id,
-        type: category.type,
+        title: icon.title,
+        icon_name: icon.icon_name,
+        user_id: icon.user_id,
+        type: icon.type,
       },
     });
 
     if (exists) {
-      throw new HttpException('分类已存在', HttpStatus.BAD_REQUEST);
+      throw new HttpException('icon已存在', HttpStatus.BAD_REQUEST);
     }
 
-    await this.categoriesRepository.save(category);
+    await this.categoriesRepository.save(icon);
 
     return {
       success: true,
-      message: '分类创建成功',
+      message: 'icon创建成功',
     };
   }
 }

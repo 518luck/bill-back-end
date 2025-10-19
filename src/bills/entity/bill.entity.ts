@@ -21,7 +21,7 @@ export class Bill {
 
   // 备注
   @Column({ length: 200 })
-  note?: string;
+  note: string;
 
   //消费/支出
   @Column({ type: 'enum', enum: IconType })

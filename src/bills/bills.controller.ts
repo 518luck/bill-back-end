@@ -19,8 +19,8 @@ export class BillsController {
 
   //创建分类图标(购物,工资...) *普通用户
   @Post('icon')
-  addIcon(@Body() createCategoryDto: CreateIconDto) {
-    return this.billsService.createIcon(createCategoryDto);
+  addIcon(@Body() createIconDto: CreateIconDto) {
+    return this.billsService.createIcon(createIconDto);
   }
 
   //创建全局分类图标(购物,工资...) *管理员-->用来创建默认图标
