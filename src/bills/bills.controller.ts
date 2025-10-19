@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 
 import { BillsService } from '@/bills/bills.service';
 import { CreateBillDto, CreateIconDto } from '@/bills/dto';
@@ -16,6 +16,11 @@ export class BillsController {
   createBill(@Body() createBillDto: CreateBillDto) {
     return this.billsService.createBill(createBillDto);
   }
+  // 删除账单
+  // @Delete(':id')
+  // deleteBill(@Param('id') id: string) {
+  //   return this.billsService.deleteBill(id);
+  // }
 
   //创建分类图标(购物,工资...) *普通用户
   @Post('icon')

@@ -5,6 +5,7 @@ import { DatabaseModule } from '@/database/mysql.module';
 import { UsersModule } from '@/users/users.module';
 import { AuthModule } from '@/auth/auth.module';
 import { BillsModule } from '@/bills/bills.module';
+import { SnowflakeModule } from '@/common/snowflake/snowflake.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { BillsModule } from '@/bills/bills.module';
     BillsModule,
 
     DatabaseModule,
+    SnowflakeModule,
 
     ConfigModule.forRoot({
       isGlobal: true,
