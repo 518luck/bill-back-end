@@ -9,6 +9,7 @@ import { AppModule } from '@/app.module';
 import { validationConfig } from '@/config/validation.config';
 import { swaggerConfig } from '@/config/swgger.config';
 import { RolesGuard } from '@/guard/roles.guard';
+import { InjectUserIdInterceptor } from '@/interceptor/inject-userid.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,7 +20,10 @@ async function bootstrap() {
   // 配置全局校验管道 - 目前只响应了DTO
   validationConfig(app);
   // 配置全局序列化拦截器
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
+    new InjectUserIdInterceptor(),
+  );
   // 注册全局守卫
   app.useGlobalGuards(new RolesGuard(app.get(Reflector)));
 

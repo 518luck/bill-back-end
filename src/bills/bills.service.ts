@@ -36,9 +36,14 @@ export class BillsService {
   }
 
   // 创建分类(购物,工资...)
-  async createIcon(createCategoryDto: CreateIconDto) {
+  async createIcon(createCategoryDto: CreateIconDto, isAdmin: boolean = false) {
+    console.log(
+      '🚀 ~ BillsService ~ createIcon ~ createCategoryDto:',
+      createCategoryDto,
+    );
     const category = this.categoriesRepository.create({
       ...createCategoryDto,
+      user_id: isAdmin ? '0' : createCategoryDto.user_id,
     });
 
     const exists = await this.categoriesRepository.findOne({

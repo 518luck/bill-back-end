@@ -26,7 +26,7 @@ export class BillsController {
   @Post('admin-icon')
   @Roles(UserRole.ADMIN)
   addAdminIcon(@Body() createIconDto: CreateIconDto) {
-    return this.billsService.createIcon(createIconDto);
+    return this.billsService.createIcon(createIconDto, true);
   }
 
   // 获取分类图标(购物,工资...)

@@ -24,8 +24,4 @@ export class CreateIconDto {
   @IsOptional()
   @IsString({ message: '用户ID必须是字符串' })
   user_id?: string;
-
-  // 只有管理员才能发送这个
-  @IsOptional()
-  global?: boolean;
 }
