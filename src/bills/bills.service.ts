@@ -6,6 +6,7 @@ import { Bill } from '@/bills/entity/bill.entity';
 import { Icon } from '@/bills/entity/icon';
 import { CreateBillDto, CreateIconDto, GetIconTypeDto } from '@/bills/dto';
 import { User } from '@/users/entity/user.entity';
+import { SnowflakeService } from '@/common/snowflake/snowflake.service';
 
 @Injectable()
 export class BillsService {
@@ -16,6 +17,7 @@ export class BillsService {
     private readonly categoriesRepository: Repository<Icon>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly snowflakeService: SnowflakeService,
   ) {}
 
   // 获取icon图标(购物,工资...)
@@ -41,6 +43,7 @@ export class BillsService {
     }
     const bill = this.billsRepository.create({
       ...createBillDto,
+      id: this.snowflakeService.generate(),
       user,
       date: createBillDto.date ? new Date(createBillDto.date) : new Date(),
     });
@@ -53,9 +56,32 @@ export class BillsService {
     };
   }
 
+  async deleteBill(id: string, userId: string) {
+    const bill = await this.billsRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['user'],
+    });
+    if (!bill) {
+      throw new HttpException('账单不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    if (bill.user.id !== userId) {
+      throw new HttpException('无权删除此账单', HttpStatus.FORBIDDEN);
+    }
+
+    await this.billsRepository.delete(id);
+    return {
+      success: true,
+      message: '这笔消费已经被划掉啦',
+    };
+  }
+
   // 创建icon(购物,工资...)
   async createIcon(createIconDto: CreateIconDto, isAdmin: boolean = false) {
     const icon = this.categoriesRepository.create({
+      id: this.snowflakeService.generate(),
       ...createIconDto,
       user_id: isAdmin ? '0' : createIconDto.user_id,
     });

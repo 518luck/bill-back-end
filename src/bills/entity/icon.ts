@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryColumn, Column, Index } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import { IconType } from '@/enum/icon-type.enum';
@@ -6,8 +6,8 @@ import { IconType } from '@/enum/icon-type.enum';
 @Index(['user_id', 'icon_name', 'type', 'title'], { unique: true })
 @Entity('icon')
 export class Icon {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({ type: 'varchar', length: 32 })
+  id: string;
 
   @Exclude()
   @Column({ type: 'varchar', default: '0' })

@@ -2,6 +2,7 @@ import { IconType } from '@/enum/icon-type.enum';
 import {
   IsEnum,
   IsISO8601,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -19,6 +20,7 @@ export class CreateBillDto {
   @IsEnum(IconType, { message: '分类类型必须是 income 或 expense' })
   type: IconType;
 
+  @IsNotEmpty({ message: '分类名称不能为空' })
   @IsString({ message: '分类名称必须是字符串' })
   icon_name: string;
 

@@ -1,6 +1,6 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Column,
   UpdateDateColumn,
   ManyToOne,
@@ -13,8 +13,8 @@ import { IconType } from '@/enum/icon-type.enum';
 
 @Entity('bill')
 export class Bill {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({ type: 'varchar', length: 32 })
+  id: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   money: number;
