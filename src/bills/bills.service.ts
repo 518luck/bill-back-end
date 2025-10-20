@@ -1,10 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 
 import { Bill } from '@/bills/entity/bill.entity';
 import { Icon } from '@/bills/entity/icon';
-import { CreateBillDto, CreateIconDto, GetIconTypeDto } from '@/bills/dto';
+import {
+  CreateBillDto,
+  CreateIconDto,
+  GetIconTypeDto,
+  GetMonthBillsDto,
+} from '@/bills/dto';
 import { User } from '@/users/entity/user.entity';
 import { SnowflakeService } from '@/common/snowflake/snowflake.service';
 
@@ -56,6 +62,7 @@ export class BillsService {
     };
   }
 
+  // 删除账单
   async deleteBill(id: string, userId: string) {
     const bill = await this.billsRepository.findOne({
       where: {
@@ -105,5 +112,58 @@ export class BillsService {
       success: true,
       message: 'icon创建成功',
     };
+  }
+
+  // 获取当月账单
+  async getMonthBills(getMonthBillsDto: GetMonthBillsDto, user_id: string) {
+    const { date_str, payday } = getMonthBillsDto;
+    const base = dayjs(date_str);
+
+    let start: dayjs.Dayjs;
+    let end: dayjs.Dayjs;
+
+    if (payday) {
+      if (base.date() < payday) {
+        start = base.subtract(1, 'month').date(payday);
+        end = base.date(payday);
+      } else {
+        start = base.date(payday);
+        end = base.add(1, 'month').date(payday);
+      }
+    } else {
+      start = base.startOf('month');
+      end = base.endOf('month');
+    }
+    // 当月开始时间
+    const startOfMonth = start.toDate();
+    // 当月结束时间
+    const endOfMonth = end.toDate();
+
+    const monthBills = await this.billsRepository.find({
+      where: {
+        user: { id: user_id },
+        date: Between(startOfMonth, endOfMonth),
+      },
+      order: {
+        date: 'ASC',
+      },
+    });
+
+    const grouped: Record<string, Bill[]> = {};
+
+    monthBills.forEach((bill) => {
+      const date = dayjs(bill.date).format('YYYY-MM-DD');
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+      grouped[date].push(bill);
+    });
+
+    const result = Object.entries(grouped).map(([day, bills]) => ({
+      day,
+      bills,
+    }));
+
+    return result;
   }
 }

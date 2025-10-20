@@ -14,6 +14,7 @@ export class CreateBillDto {
   @Min(0.01, { message: '金额必须大于0' })
   money: number;
 
+  @IsNotEmpty({ message: '备注不能为空' })
   @IsString({ message: '备注必须是字符串' })
   note: string;
 

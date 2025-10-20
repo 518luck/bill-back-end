@@ -10,6 +10,7 @@ import {
 
 import { User } from '@/users/entity/user.entity';
 import { IconType } from '@/enum/icon-type.enum';
+import { Exclude } from 'class-transformer';
 
 @Entity('bill')
 export class Bill {
@@ -38,9 +39,11 @@ export class Bill {
   })
   date: Date;
 
+  @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   create_at: Date;
 
+  @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   update_at: Date;
 

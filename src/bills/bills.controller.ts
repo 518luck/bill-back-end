@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { BillsService } from '@/bills/bills.service';
-import { CreateBillDto, CreateIconDto } from '@/bills/dto';
+import { CreateBillDto, CreateIconDto, GetMonthBillsDto } from '@/bills/dto';
 import { GetIconTypeDto } from '@/bills/dto/get-icon-type.dto';
 import { Roles } from '@/decorator/roles.decorator';
 import { UserRole } from '@/enum/user-role.enum';
@@ -51,5 +51,14 @@ export class BillsController {
     @UserId() userId: string,
   ) {
     return this.billsService.getIconTypes(getIconTypeDto, userId);
+  }
+
+  //获取当月账单
+  @Get('month')
+  getMonthBills(
+    @Query() getMonthBillsDto: GetMonthBillsDto,
+    @UserId() user_id: string,
+  ) {
+    return this.billsService.getMonthBills(getMonthBillsDto, user_id);
   }
 }
