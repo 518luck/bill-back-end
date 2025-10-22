@@ -53,6 +53,12 @@ export class BillsController {
     return this.billsService.getIconTypes(getIconTypeDto, userId);
   }
 
+  //删除自定义的图标
+  @Delete('icon/:id')
+  deleteIcon(@Param('id') id: string, @UserId() userId: string) {
+    return this.billsService.deleteIcon(id, userId);
+  }
+
   //获取当月账单
   @Get('month')
   getMonthBills(

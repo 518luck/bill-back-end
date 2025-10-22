@@ -145,7 +145,7 @@ export class BillsService {
         date: Between(startOfMonth, endOfMonth),
       },
       order: {
-        date: 'ASC',
+        date: 'DESC',
       },
     });
 
@@ -165,5 +165,27 @@ export class BillsService {
     }));
 
     return result;
+  }
+
+  // 删除自定义的图标
+  async deleteIcon(id: string, userId: string) {
+    const icon = await this.categoriesRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!icon) {
+      throw new HttpException('图标不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    if (icon.user_id !== userId) {
+      throw new HttpException('无权删除此图标', HttpStatus.FORBIDDEN);
+    }
+
+    await this.categoriesRepository.delete(id);
+    return {
+      success: true,
+      message: '图标删除成功',
+    };
   }
 }
