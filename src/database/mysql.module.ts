@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { ConfigEnum } from '@/enum/config.enum';
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

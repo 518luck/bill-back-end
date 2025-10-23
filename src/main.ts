@@ -4,13 +4,13 @@ import { ClassSerializerInterceptor } from '@nestjs/common';
 declare const module: {
   hot?: { accept: () => void; dispose: (callback: () => void) => void };
 };
-
+import { config } from 'dotenv';
 import { AppModule } from '@/app.module';
 import { validationConfig } from '@/config/validation.config';
 import { swaggerConfig } from '@/config/swgger.config';
 import { RolesGuard } from '@/guard/roles.guard';
 import { InjectUserIdInterceptor } from '@/interceptor/inject-userid.interceptor';
-
+config({ path: '.env' });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('bill/v1');

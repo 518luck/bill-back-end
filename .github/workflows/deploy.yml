@@ -41,5 +41,5 @@ jobs:
             git pull
             pnpm install
             pnpm run build
-            pm2 restart bill-server || pm2 start dist/main.js --name bill-server
+            pm2 restart bill-server --update-env || pm2 start dist/main.js --name bill-server --update-env
             pm2 save
