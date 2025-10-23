@@ -32,6 +32,7 @@
     "@types/passport-jwt": "^4.0.1",
     "argon2": "^0.44.0",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dayjs": "^1.11.18",
     "mysql2": "^3.15.1",
     "passport": "^0.7.0",
