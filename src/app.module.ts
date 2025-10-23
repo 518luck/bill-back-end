@@ -17,6 +17,7 @@ import { SnowflakeModule } from '@/common/snowflake/snowflake.module';
     SnowflakeModule,
 
     ConfigModule.forRoot({
+      envFilePath: '/www/wwwroot/bill/server/.env',
       isGlobal: true,
     }),
   ],
