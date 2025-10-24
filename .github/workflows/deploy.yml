@@ -37,9 +37,9 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             export PATH=$PATH:/www/server/nodejs/v22.19.0/bin
-            cd /www/wwwroot/bill/server
-            git pull
-            pnpm install
-            pnpm run build
-            pm2 restart bill-server --update-env || pm2 start dist/main.js --name bill-server --update-env
+            cd /www/wwwroot/bill/server || exit 1
+            git pull || exit 1
+            pnpm install || exit 1
+            pnpm run build || exit 1
+            pm2 restart ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
             pm2 save

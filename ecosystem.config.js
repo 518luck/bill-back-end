@@ -14,6 +14,8 @@ module.exports = {
       error: './logs/error.log', // 错误输出
       merge_logs: true, // 标准输出和错误输出合并
       log_date_format: 'YYYY-MM-DD HH:mm:ss', // 打印时间格式
+      max_size: '10M',
+      retain: 5,
     },
   ],
 };
