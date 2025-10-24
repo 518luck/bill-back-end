@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'my-nestjs-project',
+      name: 'bill-server',
       script: 'dist/main.js',
       env: {
         NODE_ENV: 'development',

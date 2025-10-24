@@ -24,11 +24,6 @@ async function bootstrap() {
   );
   // 注册全局守卫
   app.useGlobalGuards(new RolesGuard(app.get(Reflector)));
-  console.log('DB_HOST:', process.env.DB_HOST);
-  console.log('DB_PORT:', process.env.DB_PORT);
-  console.log('DB_NAME:', process.env.DB_NAME);
-  console.log('DB_PASS:', process.env.DB_PASS);
-  console.log('DB_DATABASE:', process.env.DB_DATABASE);
   await app.listen(process.env.PORT ?? 3000);
 
   if (module.hot) {
