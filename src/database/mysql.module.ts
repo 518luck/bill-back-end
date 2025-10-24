@@ -18,7 +18,7 @@ import configuration from '@/config/configuration';
         port: configService.get('database.port'),
         username: configService.get('database.username'),
         password: configService.get('database.password'),
-        database: configService.get('database.datauser'),
+        database: configService.get('database.database'),
         // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         entities: [__dirname + '/../**/*.entity.js'],
         autoLoadEntities: true,

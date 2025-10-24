@@ -4,7 +4,7 @@ interface DatabaseConfig {
   port: number;
   username: string;
   password: string;
-  datauser: string;
+  database: string;
 }
 
 interface JwtConfig {
@@ -28,7 +28,7 @@ export default (): AppConfig => ({
     port: parseInt(process?.env?.DB_PORT || '3306', 10),
     username: process.env.DB_NAME || '123456',
     password: process.env.DB_PASS || '123456',
-    datauser: process.env.DB_USER || '123456',
+    database: process.env.DB_DATABASE || '123456',
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'default',
