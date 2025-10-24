@@ -6,7 +6,11 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'webpack-hmr.config.js'],
+    ignores: [
+      'eslint.config.mjs',
+      'webpack-hmr.config.js',
+      'ecosystem.config.js',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
