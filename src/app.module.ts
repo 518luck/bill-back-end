@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from '@/database/mysql.module';
 import { UsersModule } from '@/users/users.module';
 import { AuthModule } from '@/auth/auth.module';
@@ -15,11 +14,6 @@ import { SnowflakeModule } from '@/common/snowflake/snowflake.module';
 
     DatabaseModule,
     SnowflakeModule,
-
-    ConfigModule.forRoot({
-      envFilePath: '/www/wwwroot/bill/server/.env',
-      isGlobal: true,
-    }),
   ],
   controllers: [],
   providers: [],
