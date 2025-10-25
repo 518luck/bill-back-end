@@ -13,6 +13,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('bill/v1');
 
+  app.enableCors({
+    origin: ['http://zhanglin.asia'], // 你的前端域名
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+  });
+
   //配置swagger
   swaggerConfig(app);
   // 配置全局校验管道 - 目前只响应了DTO
