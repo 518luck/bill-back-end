@@ -1,6 +1,7 @@
 import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
 import { Debt } from '@/debts/entity/debt.entity';
 
+// 存放每一次还款明细
 @Entity('repayments')
 export class Repayment {
   //主键

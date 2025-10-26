@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
 import { Repayment } from '@/debts/entity/repayment.entity';
 import { User } from '@/users/entity/user.entity';
+//存放"总体信息"
 @Entity('debts')
 export class Debt {
   // 主键(唯一ID)
@@ -23,7 +24,7 @@ export class Debt {
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   repaid_amount: number;
 
-  // 本月应还金额
+  // 本月应还金额 //太难算了,直接让用户自己存吧
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   current_month_due: number;
 

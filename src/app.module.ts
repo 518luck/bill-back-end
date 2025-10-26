@@ -5,12 +5,14 @@ import { UsersModule } from '@/users/users.module';
 import { AuthModule } from '@/auth/auth.module';
 import { BillsModule } from '@/bills/bills.module';
 import { SnowflakeModule } from '@/common/snowflake/snowflake.module';
+import { DebtsModule } from '@/debts/debts.module';
 
 @Module({
   imports: [
     UsersModule,
     AuthModule,
     BillsModule,
+    DebtsModule,
 
     DatabaseModule,
     SnowflakeModule,
