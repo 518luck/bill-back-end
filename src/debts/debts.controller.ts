@@ -36,4 +36,10 @@ export class DebtsController {
   deleteDebt(@Param('id') id: string, @UserId() userId: string) {
     return this.debtsService.deleteDebt(id, userId);
   }
+
+  //获取还款记录
+  @Get('repayments/:id')
+  getRepayments(@Param('id') id: string) {
+    return this.debtsService.getRepayments(id);
+  }
 }

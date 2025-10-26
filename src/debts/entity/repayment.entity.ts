@@ -9,7 +9,9 @@ export class Repayment {
   id: string;
 
   //关联的债务id
-  @ManyToOne(() => Debt, (debt) => debt.repayments)
+  @ManyToOne(() => Debt, (debt) => debt.repayments, {
+    onDelete: 'CASCADE',
+  })
   debt_id: Debt;
 
   // 本次还债金额

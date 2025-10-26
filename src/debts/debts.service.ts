@@ -53,14 +53,17 @@ export class DebtsService {
 
   // 删除债务
   async deleteDebt(id: string, userId: string) {
-    const debt = await this.debtsRepository.findOneBy({
-      id,
+    const debt = await this.debtsRepository.findOne({
+      where: {
+        id,
+      },
+      relations: { user: true },
     });
     if (!debt) {
       throw new HttpException('债务不存在', HttpStatus.BAD_REQUEST);
     }
     if (debt.status !== DebtStatusEnum.PAID) {
-      throw new HttpException('未还清的债务不能删除', HttpStatus.BAD_REQUEST);
+      throw new HttpException('未还清的债务不能删除哦', HttpStatus.BAD_REQUEST);
     }
     if (debt.user.id !== userId) {
       throw new HttpException('无权删除此债务', HttpStatus.FORBIDDEN);
@@ -100,8 +103,9 @@ export class DebtsService {
     debt.repaid_amount = Number(amount) + Number(debt.repaid_amount);
     await this.debtsRepository.save(debt);
     // 如果已偿还金额等于债务金额，债务状态改为已还清
-    if (debt.repaid_amount >= debt.total_amount) {
+    if (Number(debt.repaid_amount) >= Number(debt.total_amount)) {
       debt.status = DebtStatusEnum.PAID;
+      await this.debtsRepository.save(debt);
     }
 
     //还欠金额
@@ -115,5 +119,19 @@ export class DebtsService {
       success: true,
       message,
     };
+  }
+
+  // 获取债务的还款记录
+  async getRepayments(debt_id: string) {
+    const debt = await this.debtsRepository.findOne({
+      where: {
+        id: debt_id,
+      },
+      relations: { repayments: true },
+    });
+    if (!debt) {
+      throw new HttpException('债务不存在', HttpStatus.BAD_REQUEST);
+    }
+    return debt.repayments;
   }
 }
