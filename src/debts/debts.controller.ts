@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { DebtsService } from '@/debts/debts.service';
-import { CreateDebtDto } from '@/debts/dto/create-dabt.dto';
+import { CreateDebtDto, CreateRepaymentDto } from '@/debts/dto';
 import { UserId } from '@/decorator/extract-jwt-user-id.decorator';
 
 @Controller('debts')
@@ -14,5 +14,20 @@ export class DebtsController {
     @UserId() userId: string,
   ) {
     return this.debtsService.createDebt(createRepaymentDto, userId);
+  }
+
+  // 获取用户所有债务
+  @Get()
+  getDebts(@UserId() userId: string) {
+    return this.debtsService.getDebts(userId);
+  }
+
+  // 偿还债务
+  @Post('repay')
+  repayDebt(
+    @Body() repayDebtDto: CreateRepaymentDto,
+    @UserId() userId: string,
+  ) {
+    return this.debtsService.repayDebt(repayDebtDto, userId);
   }
 }

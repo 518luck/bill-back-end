@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Repayment } from '@/debts/entity/repayment.entity';
 import { User } from '@/users/entity/user.entity';
 //存放"总体信息"
@@ -9,7 +9,7 @@ export class Debt {
   id: string;
 
   // 关联用户ID
-  @ManyToMany(() => User, (user) => user.debts)
+  @ManyToOne(() => User, (user) => user.debts)
   user: User;
 
   // 欠款方
@@ -36,6 +36,6 @@ export class Debt {
   @Column({ type: 'date', nullable: true })
   end_date: Date;
 
-  @OneToMany(() => Repayment, (repayment) => repayment.debt)
+  @OneToMany(() => Repayment, (repayment) => repayment.debt_id)
   repayments: Repayment[];
 }

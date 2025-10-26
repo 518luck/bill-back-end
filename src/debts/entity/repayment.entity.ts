@@ -10,7 +10,7 @@ export class Repayment {
 
   //关联的债务id
   @ManyToOne(() => Debt, (debt) => debt.repayments)
-  debt: Debt;
+  debt_id: Debt;
 
   // 本次还债金额
   @Column('decimal', { precision: 10, scale: 2 })
