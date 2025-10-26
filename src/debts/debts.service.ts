@@ -76,8 +76,18 @@ export class DebtsService {
     await this.repaymentsRepository.save(repayment);
 
     // 更新债务的已偿还金额
-    debt.repaid_amount += amount;
+    debt.repaid_amount = Number(amount) + Number(debt.repaid_amount);
     await this.debtsRepository.save(debt);
-    return '偿还债务';
+    // 如果已偿还金额等于债务金额，债务状态改为已还清
+    if (debt.repaid_amount >= debt.total_amount) {
+      debt.status = 'paid';
+    }
+
+    //还欠金额
+    const owe_amount = Number(debt.total_amount) - Number(debt.repaid_amount);
+    return {
+      success: true,
+      message: `还欠${owe_amount.toFixed(2)}元,加油!`,
+    };
   }
 }

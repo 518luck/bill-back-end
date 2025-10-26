@@ -36,6 +36,10 @@ export class Debt {
   @Column({ type: 'date', nullable: true })
   end_date: Date;
 
+  // 债务状态(owed:欠款中,paid:已还清)
+  @Column({ type: 'varchar', length: 10, default: 'owed' })
+  status: string;
+
   @OneToMany(() => Repayment, (repayment) => repayment.debt_id)
   repayments: Repayment[];
 }
