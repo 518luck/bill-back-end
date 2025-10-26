@@ -51,6 +51,27 @@ export class DebtsService {
     return debts;
   }
 
+  // 删除债务
+  async deleteDebt(id: string, userId: string) {
+    const debt = await this.debtsRepository.findOneBy({
+      id,
+    });
+    if (!debt) {
+      throw new HttpException('债务不存在', HttpStatus.BAD_REQUEST);
+    }
+    if (debt.status !== DebtStatusEnum.PAID) {
+      throw new HttpException('未还清的债务不能删除', HttpStatus.BAD_REQUEST);
+    }
+    if (debt.user.id !== userId) {
+      throw new HttpException('无权删除此债务', HttpStatus.FORBIDDEN);
+    }
+    await this.debtsRepository.delete(id);
+    return {
+      success: true,
+      message: '删除成功',
+    };
+  }
+
   // 偿还债务
   async repayDebt(createRepaymentDto: CreateRepaymentDto, userId: string) {
     const { debt_id, amount } = createRepaymentDto;
@@ -85,9 +106,14 @@ export class DebtsService {
 
     //还欠金额
     const owe_amount = Number(debt.total_amount) - Number(debt.repaid_amount);
+    const message =
+      debt.status === DebtStatusEnum.PAID
+        ? '还清啦'
+        : `还欠${owe_amount.toFixed(2)}元,加油!`;
+
     return {
       success: true,
-      message: `还欠${owe_amount.toFixed(2)}元,加油!`,
+      message,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { DebtsService } from '@/debts/debts.service';
 import { CreateDebtDto, CreateRepaymentDto } from '@/debts/dto';
 import { UserId } from '@/decorator/extract-jwt-user-id.decorator';
@@ -29,5 +29,11 @@ export class DebtsController {
     @UserId() userId: string,
   ) {
     return this.debtsService.repayDebt(repayDebtDto, userId);
+  }
+
+  // 删除债务
+  @Delete(':id')
+  deleteDebt(@Param('id') id: string, @UserId() userId: string) {
+    return this.debtsService.deleteDebt(id, userId);
   }
 }
