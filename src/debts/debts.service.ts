@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateDebtDto, CreateRepaymentDto } from '@/debts/dto';
+import { CreateDebtDto, CreateRepaymentDto, UpdateDebtDto } from '@/debts/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@/users/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -133,5 +133,38 @@ export class DebtsService {
       throw new HttpException('债务不存在', HttpStatus.BAD_REQUEST);
     }
     return debt.repayments;
+  }
+
+  // 更新债务
+  async updateDebt(id: string, updateDebt: UpdateDebtDto) {
+    const debt = await this.debtsRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!debt) {
+      throw new HttpException('债务不存在', HttpStatus.BAD_REQUEST);
+    }
+    if (updateDebt.creditor !== undefined) debt.creditor = updateDebt.creditor;
+    if (updateDebt.total_amount !== undefined)
+      debt.total_amount = updateDebt.total_amount;
+    if (updateDebt.repaid_amount !== undefined)
+      debt.repaid_amount = updateDebt.repaid_amount;
+    if (updateDebt.current_month_due !== undefined)
+      debt.current_month_due = updateDebt.current_month_due;
+
+    // 根据累计已还金额自动更新状态
+    if (Number(debt.repaid_amount) >= Number(debt.total_amount)) {
+      debt.status = DebtStatusEnum.PAID;
+    } else {
+      debt.status = DebtStatusEnum.OWED;
+    }
+
+    await this.debtsRepository.save(debt);
+
+    return {
+      success: true,
+      message: '更新成功',
+    };
   }
 }
