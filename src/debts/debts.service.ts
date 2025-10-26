@@ -3,7 +3,7 @@ import { CreateDebtDto, CreateRepaymentDto } from '@/debts/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@/users/entity/user.entity';
 import { Repository } from 'typeorm';
-import { Debt } from '@/debts/entity/debt.entity';
+import { Debt, DebtStatusEnum } from '@/debts/entity/debt.entity';
 import { SnowflakeService } from '@/common/snowflake/snowflake.service';
 import { Repayment } from '@/debts/entity/repayment.entity';
 
@@ -80,7 +80,7 @@ export class DebtsService {
     await this.debtsRepository.save(debt);
     // 如果已偿还金额等于债务金额，债务状态改为已还清
     if (debt.repaid_amount >= debt.total_amount) {
-      debt.status = 'paid';
+      debt.status = DebtStatusEnum.PAID;
     }
 
     //还欠金额

@@ -1,6 +1,12 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Repayment } from '@/debts/entity/repayment.entity';
 import { User } from '@/users/entity/user.entity';
+import { IsEnum } from 'class-validator';
+
+export enum DebtStatusEnum {
+  OWED = 'owed', // 欠款中
+  PAID = 'paid', // 已还清
+}
 //存放"总体信息"
 @Entity('debts')
 export class Debt {
@@ -37,8 +43,9 @@ export class Debt {
   end_date: Date;
 
   // 债务状态(owed:欠款中,paid:已还清)
-  @Column({ type: 'varchar', length: 10, default: 'owed' })
-  status: string;
+  @Column({ type: 'enum', enum: DebtStatusEnum, default: DebtStatusEnum.OWED })
+  @IsEnum(DebtStatusEnum)
+  status: DebtStatusEnum;
 
   @OneToMany(() => Repayment, (repayment) => repayment.debt_id)
   repayments: Repayment[];
