@@ -36,7 +36,10 @@ export class DebtsService {
       user,
     });
     await this.debtsRepository.save(debt);
-    return debt;
+    return {
+      success: true,
+      message: '小账童记下啦',
+    };
   }
 
   // 获取用户所有债务
