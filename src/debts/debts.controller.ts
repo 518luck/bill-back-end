@@ -56,4 +56,10 @@ export class DebtsController {
   updateDebt(@Param('id') id: string, @Body() updateDebtDto: UpdateDebtDto) {
     return this.debtsService.updateDebt(id, updateDebtDto);
   }
+
+  // 资产债务饼图数据
+  @Get('asset-debt-pie')
+  getAssetDebtPie(@UserId() userId: string) {
+    return this.debtsService.getAssetDebtPie(userId);
+  }
 }

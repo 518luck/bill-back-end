@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Debt, DebtStatusEnum } from '@/debts/entity/debt.entity';
 import { SnowflakeService } from '@/common/snowflake/snowflake.service';
 import { Repayment } from '@/debts/entity/repayment.entity';
+import { Asset } from './entity/asset.entity';
 
 @Injectable()
 export class DebtsService {
@@ -16,6 +17,8 @@ export class DebtsService {
     private readonly debtsRepository: Repository<Debt>,
     @InjectRepository(Repayment)
     private readonly repaymentsRepository: Repository<Repayment>,
+    @InjectRepository(Asset)
+    private readonly assetsRepository: Repository<Asset>,
     private readonly snowflakeService: SnowflakeService,
   ) {}
 
@@ -169,5 +172,15 @@ export class DebtsService {
       success: true,
       message: '更新成功',
     };
+  }
+
+  // 资产债务饼图数据
+  async getAssetDebtPie(userId: string) {
+    const assets = await this.assetsRepository.find({
+      where: {
+        id: userId,
+      },
+    });
+    return '打通啦';
   }
 }
