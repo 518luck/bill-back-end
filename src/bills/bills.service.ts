@@ -188,4 +188,16 @@ export class BillsService {
       message: '图标删除成功',
     };
   }
+
+  // 获取用户所有账单
+  async findUserBills(userId: string) {
+    return this.billsRepository.find({
+      where: {
+        user: { id: userId },
+      },
+      order: {
+        date: 'DESC',
+      },
+    });
+  }
 }

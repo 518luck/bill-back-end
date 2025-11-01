@@ -7,6 +7,9 @@ import { Debt, DebtStatusEnum } from '@/debts/entity/debt.entity';
 import { SnowflakeService } from '@/common/snowflake/snowflake.service';
 import { Repayment } from '@/debts/entity/repayment.entity';
 import { Asset } from './entity/asset.entity';
+import { Bill } from '@/bills/entity/bill.entity';
+import { BillsService } from '@/bills/bills.service';
+import { IconType } from '@/enum/icon-type.enum';
 
 @Injectable()
 export class DebtsService {
@@ -19,7 +22,10 @@ export class DebtsService {
     private readonly repaymentsRepository: Repository<Repayment>,
     @InjectRepository(Asset)
     private readonly assetsRepository: Repository<Asset>,
+    @InjectRepository(Bill)
+    private readonly billsRepository: Repository<Bill>,
     private readonly snowflakeService: SnowflakeService,
+    private readonly billsService: BillsService,
   ) {}
 
   // 创建债务
@@ -176,11 +182,81 @@ export class DebtsService {
 
   // 资产债务饼图数据
   async getAssetDebtPie(userId: string) {
-    const assets = await this.assetsRepository.find({
+    let asset = await this.assetsRepository.findOne({
       where: {
-        id: userId,
+        user: { id: userId },
       },
     });
-    return '打通啦';
+
+    // 如果用户没有资产记录，创建一个默认资产记录
+    if (!asset) {
+      asset = this.assetsRepository.create({
+        user: { id: userId }, // 关联用户
+        included_in_bill_calc: true, // 默认参与核算
+        calc_debt_for_current_month: true, // 默认计算当前月负债
+        balance: 0, // 默认余额为0
+      });
+      await this.assetsRepository.save(asset);
+    }
+
+    // 构造返回数据
+    const responseData = {
+      // 余额
+      balance: 0,
+      // 债务
+      debt: 0,
+    };
+
+    // 是否添加用户账单进入债务计算
+    if (asset?.included_in_bill_calc) {
+      // 暂存收支
+      let totalIncome = 0;
+      let totalExpense = 0;
+      let netIncome = 0;
+
+      const bills = await this.billsService.findUserBills(userId);
+
+      bills.forEach((bill) => {
+        if (bill.type === IconType.INCOME) {
+          totalIncome += Number(bill.money);
+        } else if (bill.type === IconType.EXPENSE) {
+          totalExpense += Number(bill.money);
+        }
+      });
+
+      // 净收支 = 收入 - 支出
+      netIncome = totalIncome - totalExpense;
+
+      if (netIncome > 0) {
+        responseData.balance += Number(netIncome);
+      } else {
+        responseData.debt += Number(netIncome);
+      }
+    }
+
+    // 获取用户负债情况
+    const debts = await this.getDebts(userId);
+    //判断用户负债是否选择月负债还是总负债
+    if (asset.calc_debt_for_current_month) {
+      // 计算当前月负债
+      debts.forEach((debt) => {
+        if (debt.status === DebtStatusEnum.OWED) {
+          responseData.debt += Number(debt.current_month_due);
+        }
+      });
+    } else {
+      // 计算总负债
+      debts.forEach((debt) => {
+        if (debt.status === DebtStatusEnum.OWED) {
+          responseData.debt += Number(debt.total_amount);
+        }
+      });
+    }
+
+    if (Number(asset.balance) > 0) {
+      responseData.balance += Number(asset.balance);
+    }
+
+    return responseData;
   }
 }

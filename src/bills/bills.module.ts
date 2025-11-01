@@ -12,5 +12,6 @@ import { User } from '@/users/entity/user.entity';
   imports: [TypeOrmModule.forFeature([Bill, Icon, User]), ConfigModule],
   controllers: [BillsController],
   providers: [BillsService],
+  exports: [BillsService],
 })
 export class BillsModule {}
