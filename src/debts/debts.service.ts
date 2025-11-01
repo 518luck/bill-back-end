@@ -315,4 +315,32 @@ export class DebtsService {
       message: '更新成功',
     };
   }
+
+  // 获取资产债务配置信息
+  async getAssetDebtPieConfig(userId: string) {
+    //检查用户是否存在
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    const asset = await this.assetsRepository.findOne({
+      where: {
+        user: { id: userId },
+      },
+    });
+    if (!asset) {
+      throw new HttpException('资产不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    return {
+      monthly_only: asset.calc_debt_for_current_month,
+      include_bills: asset.included_in_bill_calc,
+      balance: asset.balance,
+    };
+  }
 }

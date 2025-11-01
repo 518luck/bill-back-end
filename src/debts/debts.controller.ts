@@ -72,4 +72,10 @@ export class DebtsController {
   getAssetDebtPie(@UserId() userId: string) {
     return this.debtsService.getAssetDebtPie(userId);
   }
+
+  // 获取资产债务配置信息
+  @Get('asset-debt-pie/config')
+  getAssetDebtPieConfig(@UserId() userId: string) {
+    return this.debtsService.getAssetDebtPieConfig(userId);
+  }
 }
