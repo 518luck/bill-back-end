@@ -10,6 +10,7 @@ import { Asset } from './entity/asset.entity';
 import { Bill } from '@/bills/entity/bill.entity';
 import { BillsService } from '@/bills/bills.service';
 import { IconType } from '@/enum/icon-type.enum';
+import { UpdateAssetDebtPieDto } from '@/debts/dto/update-asset-debt-pie.dto';
 
 @Injectable()
 export class DebtsService {
@@ -182,6 +183,16 @@ export class DebtsService {
 
   // 资产债务饼图数据
   async getAssetDebtPie(userId: string) {
+    //检查用户是否存在
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
     let asset = await this.assetsRepository.findOne({
       where: {
         user: { id: userId },
@@ -258,5 +269,47 @@ export class DebtsService {
     }
 
     return responseData;
+  }
+
+  // 修改资产负债饼图数据
+  async updateAssetDebtPie(
+    userId: string,
+    updateAssetDebtPieDto: UpdateAssetDebtPieDto,
+  ) {
+    //检查用户是否存在
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    const asset = await this.assetsRepository.findOne({
+      where: {
+        user: { id: userId },
+      },
+    });
+    if (!asset) {
+      throw new HttpException('资产不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    // 使用解构赋值，只赋值存在的字段
+    if (updateAssetDebtPieDto) {
+      const { monthly_only, include_bills, balance } = updateAssetDebtPieDto;
+
+      if (monthly_only !== undefined)
+        asset.calc_debt_for_current_month = monthly_only;
+      if (include_bills !== undefined)
+        asset.included_in_bill_calc = include_bills;
+      if (balance !== undefined) asset.balance = balance;
+    }
+    await this.assetsRepository.save(asset);
+
+    return {
+      success: true,
+      message: '更新成功',
+    };
   }
 }

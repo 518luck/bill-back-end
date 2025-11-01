@@ -10,6 +10,7 @@ import {
 import { DebtsService } from '@/debts/debts.service';
 import { CreateDebtDto, CreateRepaymentDto, UpdateDebtDto } from '@/debts/dto';
 import { UserId } from '@/decorator/extract-jwt-user-id.decorator';
+import { UpdateAssetDebtPieDto } from '@/debts/dto/update-asset-debt-pie.dto';
 
 @Controller('debts')
 export class DebtsController {
@@ -49,6 +50,15 @@ export class DebtsController {
   @Get('repayments/:id')
   getRepayments(@Param('id') id: string) {
     return this.debtsService.getRepayments(id);
+  }
+
+  // 修改债务饼图数据
+  @Patch('asset-debt-pie')
+  updateAssetDebtPie(
+    @UserId() userId: string,
+    @Body() updateAssetDebtPieDto: UpdateAssetDebtPieDto,
+  ) {
+    return this.debtsService.updateAssetDebtPie(userId, updateAssetDebtPieDto);
   }
 
   // 修改债务
