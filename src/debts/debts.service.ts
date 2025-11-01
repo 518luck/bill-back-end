@@ -268,7 +268,10 @@ export class DebtsService {
       responseData.balance += Number(asset.balance);
     }
 
-    return responseData;
+    return {
+      balance: Math.floor(responseData.balance),
+      debt: Math.floor(responseData.debt),
+    };
   }
 
   // 修改资产负债饼图数据
