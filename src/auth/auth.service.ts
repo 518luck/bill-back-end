@@ -12,12 +12,20 @@ import { UsersService } from '@/users/users.service';
 import { getAccountType } from '@/utils/account-type';
 import { AccountType } from '@/enum/account-type.enum';
 import { User } from '@/users/entity/user.entity';
+import { EmailRegisterDto } from '@/auth/dto/email-register.dto';
+import { EmailVerificationService } from '@/auth/email-verification.service';
+import { Repository } from 'typeorm';
+import { UserEmail } from '@/users/entity/user-email.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly emailVerificationService: EmailVerificationService,
+    @InjectRepository(UserEmail)
+    private readonly userEmailRepository: Repository<UserEmail>,
   ) {}
 
   // 用户登录
@@ -69,5 +77,44 @@ export class AuthService {
   generateJwt(user: User) {
     const payload = { sub: user.id, username: user.username, role: user.role };
     return this.jwtService.sign(payload);
+  }
+
+  // src/auth/auth.service.ts
+  async registerWithEmail(registerDto: EmailRegisterDto) {
+    // 验证验证码
+    const isCodeValid = this.emailVerificationService.verifyCode(
+      registerDto.email,
+      registerDto.verificationCode,
+    );
+
+    if (!isCodeValid) {
+      throw new UnauthorizedException('验证码错误或已过期');
+    }
+
+    // 检查邮箱是否已注册
+    const existingEmail = await this.userEmailRepository.findOne({
+      where: { email: registerDto.email },
+      relations: ['user'],
+    });
+
+    if (existingEmail) {
+      throw new ConflictException('邮箱已被注册');
+    }
+
+    // 创建用户
+    const user = await this.usersService.createUser({
+      username: registerDto.email, // 使用邮箱作为用户名
+      password: registerDto.password,
+      verificationCode: registerDto.verificationCode,
+    });
+
+    // 创建邮箱记录
+    await this.userEmailRepository.save({
+      email: registerDto.email,
+      verified: true,
+      user,
+    });
+
+    return user;
   }
 }

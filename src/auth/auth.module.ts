@@ -10,10 +10,12 @@ import { User } from '@/users/entity/user.entity';
 import { UsersModule } from '@/users/users.module';
 import { JwtStrategy } from '@/auth/jwt.strategy';
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
+import { EmailVerificationService } from '@/auth/email-verification.service';
+import { UserEmail } from '@/users/entity/user-email.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, UserEmail]),
     UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,6 +29,7 @@ import { JwtAuthGuard } from '@/auth/jwt-auth.guard';
   controllers: [AuthController],
   providers: [
     AuthService,
+    EmailVerificationService,
     JwtStrategy,
     {
       provide: APP_GUARD,

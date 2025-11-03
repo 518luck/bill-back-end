@@ -12,6 +12,7 @@ import { Bill } from '@/bills/entity/bill.entity';
 import { UserRole } from '@/enum/user-role.enum';
 import { Debt } from '@/debts/entity/debt.entity';
 import { Asset } from '@/debts/entity/asset.entity';
+import { UserEmail } from '@/users/entity/user-email.entity';
 
 @Entity('user')
 export class User {
@@ -40,4 +41,8 @@ export class User {
   // 一个用户对应着一个资产
   @OneToOne(() => Asset, (asset) => asset.user)
   asset: Asset;
+
+  // 一个用户对应着多个邮箱
+  @OneToMany(() => UserEmail, (email) => email.user)
+  emails: UserEmail[];
 }
