@@ -26,14 +26,13 @@ export class AuthController {
     return this.authService.register(createUserDto);
   }
 
-  // src/auth/auth.controller.ts
+  // 发送验证码
   @Post('send-verification-code')
   @Public()
   async sendVerificationCode(@Body() dto: { email: string }) {
-    await this.emailVerificationService.sendVerificationCode(dto.email);
-    return { success: true, message: '验证码已发送' };
+    return await this.emailVerificationService.sendVerificationCode(dto.email);
   }
-
+  // 邮箱注册
   @Post('register-email')
   @Public()
   async registerWithEmail(@Body() registerDto: EmailRegisterDto) {

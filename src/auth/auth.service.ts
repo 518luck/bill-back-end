@@ -79,7 +79,6 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  // src/auth/auth.service.ts
   async registerWithEmail(registerDto: EmailRegisterDto) {
     // 验证验证码
     const isCodeValid = this.emailVerificationService.verifyCode(
