@@ -5,7 +5,7 @@ import { LoginDto, RegisterDto } from '@/auth/dto';
 import { Public } from '@/auth/decorator/public.decorator';
 import { EmailVerificationService } from '@/auth/email-verification.service';
 import { EmailRegisterDto } from '@/auth/dto/email-register.dto';
-
+import { Throttle } from '@nestjs/throttler';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -29,6 +29,7 @@ export class AuthController {
   // 发送验证码
   @Post('send-verification-code')
   @Public()
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
   async sendVerificationCode(@Body() dto: { email: string }) {
     return await this.emailVerificationService.sendVerificationCode(dto.email);
   }
