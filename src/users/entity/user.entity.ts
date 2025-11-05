@@ -43,6 +43,8 @@ export class User {
   asset: Asset;
 
   // 一个用户对应着多个邮箱
-  @OneToMany(() => UserEmail, (email) => email.user)
+  @OneToMany(() => UserEmail, (email) => email.user, {
+    cascade: true,
+  })
   emails: UserEmail[];
 }

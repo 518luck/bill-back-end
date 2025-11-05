@@ -16,6 +16,8 @@ export class UserEmail {
   verified: boolean;
 
   // 关联用户
-  @ManyToOne(() => User, (user) => user.emails)
+  @ManyToOne(() => User, (user) => user.emails, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 }

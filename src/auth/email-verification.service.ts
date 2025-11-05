@@ -30,8 +30,6 @@ export class EmailVerificationService {
     const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10分钟过期
 
     this.verificationCodes.set(email, { code, expiry });
-    console.log(`验证码已存储: ${email} -> ${code}`);
-    console.log('当前Map大小:', this.verificationCodes.size);
 
     const mailOptions = {
       from: this.configService.get<string>('EMAIL_USER'),
