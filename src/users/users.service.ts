@@ -43,4 +43,12 @@ export class UsersService {
 
     return this.userRepository.save(user);
   }
+
+  // 更新用户密码
+  async updateUserPassword(userId: string, newPassword: string) {
+    const hashedPassword = await argon2.hash(newPassword);
+    await this.userRepository.update(userId, {
+      password: hashedPassword,
+    });
+  }
 }

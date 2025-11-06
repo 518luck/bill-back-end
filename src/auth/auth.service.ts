@@ -79,6 +79,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
+  // 邮箱注册
   async registerWithEmail(registerDto: EmailRegisterDto) {
     // 验证验证码
     const isCodeValid = this.emailVerificationService.verifyCode(
@@ -115,5 +116,36 @@ export class AuthService {
     });
 
     return user;
+  }
+
+  // 邮箱找回密码
+  async resetPassword(resetPasswordDto: EmailRegisterDto) {
+    // 验证验证码
+    const isCodeValid = this.emailVerificationService.verifyCode(
+      resetPasswordDto.email,
+      resetPasswordDto.verificationCode,
+    );
+
+    if (!isCodeValid) {
+      throw new UnauthorizedException('验证码错误或已过期');
+    }
+
+    // 检查邮箱是否已注册
+    const existingEmail = await this.userEmailRepository.findOne({
+      where: { email: resetPasswordDto.email },
+      relations: ['user'],
+    });
+
+    if (!existingEmail) {
+      throw new ConflictException('邮箱未被注册');
+    }
+
+    // 更新用户密码
+    await this.usersService.updateUserPassword(
+      existingEmail.user.id,
+      resetPasswordDto.password,
+    );
+
+    return { message: '密码重置成功' };
   }
 }

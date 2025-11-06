@@ -39,4 +39,12 @@ export class AuthController {
   async registerWithEmail(@Body() registerDto: EmailRegisterDto) {
     return await this.authService.registerWithEmail(registerDto);
   }
+
+  // 邮箱找回密码
+  @Post('reset-password')
+  @Public()
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
+  async resetPassword(@Body() resetPasswordDto: EmailRegisterDto) {
+    return await this.authService.resetPassword(resetPasswordDto);
+  }
 }
