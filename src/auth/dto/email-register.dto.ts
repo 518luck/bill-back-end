@@ -13,8 +13,8 @@ export class EmailRegisterDto extends BaseUserDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(6)
-  @MaxLength(6)
+  @IsNotEmpty({ message: '验证码不能为空' })
+  @MinLength(6, { message: '验证码至少 6 位' })
+  @MaxLength(6, { message: '验证码最多 6 位' })
   verificationCode: string;
 }

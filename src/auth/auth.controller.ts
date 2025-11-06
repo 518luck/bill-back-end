@@ -33,6 +33,7 @@ export class AuthController {
   async sendVerificationCode(@Body() dto: { email: string }) {
     return await this.emailVerificationService.sendVerificationCode(dto.email);
   }
+
   // 邮箱注册
   @Post('register-email')
   @Public()

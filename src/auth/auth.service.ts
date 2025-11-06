@@ -9,8 +9,6 @@ import { plainToInstance } from 'class-transformer';
 
 import { LoginDto, RegisterDto } from '@/auth/dto';
 import { UsersService } from '@/users/users.service';
-import { getAccountType } from '@/utils/account-type';
-import { AccountType } from '@/enum/account-type.enum';
 import { User } from '@/users/entity/user.entity';
 import { EmailRegisterDto } from '@/auth/dto/email-register.dto';
 import { EmailVerificationService } from '@/auth/email-verification.service';
@@ -31,24 +29,13 @@ export class AuthService {
   // 用户登录
   async login(loginDto: LoginDto) {
     const { account, password } = loginDto;
-    const accountType = getAccountType(account);
-    let user;
-
-    if (accountType === AccountType.USERNAME) {
-      user = await this.usersService.findByUsername(account);
-    } else {
-      // 邮箱或手机号登录
-      const userAccount = await this.usersService.findAccount(
-        loginDto.account,
-        accountType,
-      );
-      user = userAccount?.user;
-    }
-
+    // 使用统一查找方法
+    const user = await this.usersService.findByAccount(account);
     if (!user) {
       throw new UnauthorizedException('用户不存在');
     }
 
+    // 验证密码
     const isPasswordValid = await argon2.verify(user.password, password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('密码错误');
